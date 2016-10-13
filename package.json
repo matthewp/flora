@@ -1,0 +1,26 @@
+{
+  "name": "flora",
+  "version": "1.0.0",
+  "description": "Templates, templates everywhere",
+  "main": "flora.node.js",
+  "scripts": {
+    "build:browser": "rollup -c rollup.config.js -o flora.js -f es lib/flora.js",
+    "build:node": "rollup -c rollup.config.js -o flora.node.js -f cjs -e undom,htmlparser2 lib/node.js",
+    "test": "mocha test/test.js"
+  },
+  "keywords": [
+    "templates"
+  ],
+  "author": "Matthew Phillips",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "htmlparser2": "^3.9.1",
+    "undom": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.0",
+    "rollup": "^0.36.1",
+    "rollup-plugin-commonjs": "^5.0.4",
+    "rollup-plugin-node-resolve": "^2.0.0"
+  }
+}
