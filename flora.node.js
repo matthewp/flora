@@ -4,6 +4,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var undom = _interopDefault(require('undom'));
 var htmlparser = _interopDefault(require('htmlparser2'));
+var streams = _interopDefault(require('stream'));
 
 var some = Array.prototype.some;
 
@@ -168,10 +169,11 @@ var live = {
     });
   },
   if: function(node, parentScope){
-    var hydrate = Bram.template(node);
+    debugger;
+    var hydrate = flora$1(node);
     var rendered = false;
     var child = {};
-    var placeholder = document.createTextNode('');
+    var placeholder = flora$1.document.createTextNode('');
     node.parentNode.replaceChild(placeholder, node);
     return function(val){
       if(!rendered) {
@@ -199,6 +201,26 @@ var live = {
     };
   }
 };
+
+function setupBinding(scope, parseResult, link, fn){
+  var compute = parseResult.compute(scope);
+
+  var set = function(){
+    fn(compute());
+  };
+
+  parseResult.props().forEach(function(prop){
+    var info = scope.readInTransaction(prop);
+    var model = info.model;
+    if(info.bindable !== false) {
+      info.reads.forEach(function(read){
+        link.on(read[0], read[1], set);
+      });
+    }
+  });
+
+  set();
+}
 
 let MyMap;
 
@@ -240,7 +262,7 @@ function ParseResult(){
 
 ParseResult.prototype.getValue = function(scope){
   return scope.read(this._value).value;
-}
+};
 
 ParseResult.prototype.getStringValue = function(scope){
   var out = this.raw;
@@ -425,7 +447,7 @@ Scope.prototype._read = function(prop){
   if(this.parent) {
     return this.parent.read(prop);
   }
-}
+};
 
 Scope.prototype.add = function(object){
   var model;
@@ -584,26 +606,95 @@ var parse$2 = function(str){
   template.content = frag;
 
   return template;
-}
+};
 
 let attr = a => ` ${a.name}="${enc(a.value)}"`;
 let enc = s => s.replace(/[&'"<>]/g, a => `&#${a};`);
 
-function serialize(el){
-  if(el.nodeType === 3) {
+const ASYNC$1 = Symbol.for('async-node');
+
+function* serialize(el){
+  let buffer = '';
+  /*if(el.nodeType === 3) {
     return enc(el.textContent);
-  }
+  }*/
   // Document fragment
   if(el.nodeType === 11) {
-    return el.childNodes.map(serialize).join('');
+    for(i = 0; i < el.childNodes.length; i++) {
+      node = el.childNodes[i];
+      if(node[ASYNC$1]) {
+        yield { buffer, node };
+        buffer = '';
+      }
+      gen = serialize(node);
+      do {
+        res = gen.next();
+        yield res.value;
+        buffer += '';
+      } while(!res.done);
+    }
+    return;
   }
 
   let nodeName = el.nodeName.toLowerCase();
+  buffer += '<' + nodeName;
 
-  return '<' + nodeName +
-    el.attributes.map(attr).join('') + '>' +
-    el.childNodes.map(serialize).join('') + '</' +
-    nodeName + '>';
+  var i, node, gen, res;
+  for(i = 0; i < el.attributes.length; i++) {
+    node = el.attributes[i];
+    if(node[ASYNC$1]) {
+      yield { buffer, node };
+      buffer = '';
+      //i--; // decrement so we retry this ne
+    }
+    buffer += attr(node);
+  }
+
+  for(i = 0; i < el.childNodes.length; i++) {
+    node = el.childNodes[i];
+    if(node[ASYNC$1]) {
+      yield { buffer, node };
+      buffer = '';
+    }
+    gen = serialize(node);
+    do {
+      res = gen.next();
+      yield res.value;
+      buffer += '';
+    } while(!res.done);
+  }
+
+  buffer += '</' + nodeName + '>';
+
+  yield { buffer };
+
+  yield { buffer };
+}
+
+const { Readable } = streams;
+
+const ASYNC = Symbol.for('async-node');
+
+class SerializeStream extends Readable {
+  constructor(frag) {
+    this.gen = serialize(frag);
+    this.next = Promise.resolve();
+  }
+
+  _read() {
+    this.next.then(() => {
+      var res = this.gen.next();
+      if(res.done) {
+        this.push(null);
+      } else {
+        if(res.node[ASYNC]) {
+          this.next = res.node[ASYNC];
+        }
+
+        this.push(res.value.buffer);
+      }
+    });
+  }
 }
 
 flora$1.document = document$1;
@@ -614,7 +705,8 @@ flora$1.fromString = function(str){
 
   return function(data){
     let frag = hydrate(data);
-    return serialize(frag);
+    return new SerializeStream(frag);
+    //return serialize(frag);
   };
 };
 
