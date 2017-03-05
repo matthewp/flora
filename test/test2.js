@@ -20,6 +20,4 @@ let data = {
   })
 };
 let stream = render(data);
-stream.on('data', function(d){
-  console.log('got data', d);
-});
+stream.pipe(process.stdout);

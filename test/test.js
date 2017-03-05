@@ -1,15 +1,37 @@
 const assert = require('assert');
-const flora = require('../flora.node.js').fromString;
-const fs = require('fs');
+const flora = require('../lib/fflora');
+const helpers = require('./helpers');
 
-let compares = function(tmpl, expected, data){
-  let render = flora(tmpl.trim());
-  let res = render(data);
+describe('Conditionals', function(){
+  it('basics works', function(done){
+    let tmpl = `
+      <span class="msg">Hello <strong>{{name}}</strong>!</span>
 
-  assert.equal(res.trim(), expected.trim());
-};
+      <template if="{{hasUser}}">
+        <span>{{handle}}</span>
+      </template>
+    `;
 
-describe('TextNodes', function(){
+    let data = {
+      name: 'Wilbur',
+      hasUser: Promise.resolve().then(_ => {
+        data.handle = 'w!lbur';
+        return true;
+      })
+    };
+
+    helpers.render(tmpl)(data).then(parts => {
+      assert.equal(parts.length, 2);
+      assert.equal(parts[0].trim(),
+      '<span class="msg">Hello <strong>Wilbur</strong>!</span>');
+      assert.equal(parts[1].trim(),'<span>w!lbur</span>');
+
+    })
+    .then(done, done);
+  });
+});
+
+describe.skip('TextNodes', function(){
   it('basics works', function(){
     let tmpl = `
       <template>
@@ -24,8 +46,8 @@ describe('TextNodes', function(){
   });
 });
 
-describe('Attributes', function(){
-  it.only('basics works', function(){
+describe.skip('Attributes', function(){
+  it('basics works', function(){
     let tmpl = `
       <template>
         <span class="{{myClass}}">Hello {{name}}</span>
