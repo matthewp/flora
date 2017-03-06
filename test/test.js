@@ -4,6 +4,7 @@ const helpers = require('./helpers');
 
 describe('Basics', function(){
   it('Values can be Promises', function(done){
+    this.timeout(30000);
     let tmpl = `
       <span class="msg">Hello {{name}}</span>
     `;
@@ -22,6 +23,7 @@ describe('Basics', function(){
 });
 
 require('./conditionals/index');
+require('./each/index');
 
 describe.skip('TextNodes', function(){
   it('basics works', function(){
