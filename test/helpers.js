@@ -1,4 +1,4 @@
-const flora = require('../lib/fflora');
+const flora = require('../lib/flora');
 
 exports.readAll = function(stream){
   let parts = [];

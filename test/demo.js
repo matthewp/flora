@@ -9,8 +9,6 @@ let tmpl = `
   </template>
 `;
 
-debugger;
-
 let render = flora(tmpl.trim());
 let data = {
   name: 'Wilbur',

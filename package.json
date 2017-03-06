@@ -6,6 +6,7 @@
   "scripts": {
     "build:browser": "rollup -c rollup.config.js -o flora.js -f es lib/flora.js",
     "build:node": "rollup -c rollup.config.js -o flora.node.js -f cjs -e undom,htmlparser2 lib/node.js",
+    "debug-test": "node --debug-brk --inspect node_modules/.bin/_mocha test/test.js",
     "test": "mocha test/test.js"
   },
   "keywords": [
