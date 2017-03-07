@@ -24,36 +24,3 @@ describe('Basics', function(){
 
 require('./conditionals/index');
 require('./each/index');
-
-describe.skip('TextNodes', function(){
-  it('basics works', function(){
-    let tmpl = `
-      <template>
-        <span class="msg">Hello <strong>{{name}}</strong>!</span>
-      </template>
-    `;
-    let expected = `
-      <span class="msg">Hello <strong>World</strong>!</span>
-    `;
-
-    compares(tmpl, expected, { name: 'World' });
-  });
-});
-
-describe.skip('Attributes', function(){
-  it('basics works', function(){
-    let tmpl = `
-      <template>
-        <span class="{{myClass}}">Hello {{name}}</span>
-      <template>
-    `;
-    let expected = `
-      <span class="blue">Hello Wilbur</span>
-    `;
-
-    compares(tmpl, expected, {
-      myClass: 'blue',
-      name: 'Wilbur'
-    })
-  });
-});

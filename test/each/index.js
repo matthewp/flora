@@ -1,7 +1,7 @@
 const assert = require('assert');
 const helpers = require('../helpers');
 
-describe.skip('Each', function(){
+describe('Each', function(){
   describe('With an Array', function(){
     it('Everything in one chunk', function(done){
       let tmpl = `
@@ -15,9 +15,9 @@ describe.skip('Each', function(){
       };
 
       helpers.render(tmpl)(data).then(parts => {
-        console.log('parts', parts);
-        //assert.equal(parts.length, 1);
-        //assert.equal()
+        assert.equal(parts.length, 1);
+        assert.equal(parts[0].trim(),
+        '<li>golf</li>\n        \n          <li>tennis</li>');
       })
       .then(done, done);
     });
