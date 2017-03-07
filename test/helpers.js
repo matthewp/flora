@@ -23,3 +23,7 @@ exports.render = function(tmpl){
     return exports.readAll(stream);
   };
 };
+
+exports.trim = function(str){
+  return str.replace(/\s/g,'');
+};

@@ -5,9 +5,11 @@ describe('Each', function(){
   describe('With an Array', function(){
     it('Everything in one chunk', function(done){
       let tmpl = `
+        <div>before</div>
         <template each="{{sports}}" as="sport">
           <li>{{sport}}</li>
         </template>
+        <div>after</div>
       `;
 
       let data = {
@@ -16,8 +18,8 @@ describe('Each', function(){
 
       helpers.render(tmpl)(data).then(parts => {
         assert.equal(parts.length, 1);
-        assert.equal(parts[0].trim(),
-        '<li>golf</li>\n        \n          <li>tennis</li>');
+        assert.equal(helpers.trim(parts[0]),
+        '<div>before</div><li>golf</li><li>tennis</li><div>after</div>');
       })
       .then(done, done);
     });
