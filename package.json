@@ -17,12 +17,14 @@
   "dependencies": {
     "htmlparser2": "^3.9.1",
     "is-promise": "^2.1.0",
+    "is-stream": "^1.1.0",
     "undom": "^0.3.0"
   },
   "devDependencies": {
     "mocha": "^3.1.0",
     "rollup": "^0.36.1",
     "rollup-plugin-commonjs": "^5.0.4",
-    "rollup-plugin-node-resolve": "^2.0.0"
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "stream-array": "^1.1.2"
   }
 }
