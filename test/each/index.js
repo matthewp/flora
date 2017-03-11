@@ -26,7 +26,7 @@ describe('Each', function(){
     });
   });
 
-  describe.only('With a Stream', function(){
+  describe('With a Stream', function(){
     it('Chunks out each item', function(done){
       let tmpl = `
         <div>before</div>
@@ -41,7 +41,11 @@ describe('Each', function(){
       };
 
       helpers.render(tmpl)(data).then(parts => {
-        console.log(parts);
+        assert.equal(parts.length, 4);
+        assert.equal(helpers.trim(parts[0]), '<div>before</div>');
+        assert.equal(helpers.trim(parts[1]), '<li>golf</li>');
+        assert.equal(helpers.trim(parts[2]), '<li>tennis</li>');
+        assert.equal(helpers.trim(parts[3]), '<div>after</div>');
       })
       .then(done, done);
     });
