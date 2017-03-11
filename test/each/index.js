@@ -49,5 +49,29 @@ describe('Each', function(){
       })
       .then(done, done);
     });
+
+    it.only('Works when a stream is in a stream', function(done){
+      let tmpl = `
+        <template each="{{items}}">
+          <li>
+            <template each="{{choices}}" as="choice">
+              <span>{{choice}}</span>
+            </template>
+          </li>
+        </template>
+      `;
+
+      let data = {
+        items: streamify([
+          {choices: streamify(['a','b'])},
+          {choices: streamify(['c','d'])}
+        ])
+      };
+
+      helpers.render(tmpl)(data).then(parts => {
+        console.log('PARTS!', parts);
+      })
+      .then(done, done);
+    });
   });
 });
