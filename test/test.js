@@ -1,43 +1,63 @@
 const assert = require('assert');
-const flora = require('../flora.node.js').fromString;
+//const flora = require('../flora.node.js').fromString;
+const {html} = require('../lib/index');
 const fs = require('fs');
+const through = require('through2');
 
 let compares = function(tmpl, expected, data){
-  let render = flora(tmpl.trim());
-  let res = render(data);
+  let res = tmpl(data);
 
   assert.equal(res.trim(), expected.trim());
 };
 
-describe('TextNodes', function(){
-  it('basics works', function(){
-    let tmpl = `
-      <template>
-        <span class="msg">Hello <strong>{{name}}</strong>!</span>
-      </template>
-    `;
-    let expected = `
-      <span class="msg">Hello <strong>World</strong>!</span>
-    `;
+async function readAll(stream) {
+  let values = [];
+  return new Promise((resolve) => {
+    stream.pipe(through(function(val, enc, next){
+      values.push(val.toString().trim());
+      next();
+    }, function(){
+      resolve(values);
+    }));
+  });
+}
 
-    compares(tmpl, expected, { name: 'World' });
+describe('TextNodes', function(){
+  it('basics works', async function(){
+    function tmpl({name}) {
+      return html`
+        <span class="msg">Hello <strong>${name}</strong>!</span>
+      `;
+    }
+
+    let expected = ['<span class="msg">Hello <strong>', 'World', '</strong>!</span>'];
+
+    let values = await readAll(tmpl({name: 'World'}));
+    assert.deepEqual(values, expected);
   });
 });
 
 describe('Attributes', function(){
-  it.only('basics works', function(){
-    let tmpl = `
-      <template>
-        <span class="{{myClass}}">Hello {{name}}</span>
-      <template>
-    `;
-    let expected = `
-      <span class="blue">Hello Wilbur</span>
-    `;
+  it('basics works', async function(){
+    function tmpl({myClass, name}) {
+      return html`
+        <span class="${myClass}">Hello ${name}</span>
+      `
+    }
 
-    compares(tmpl, expected, {
+    let expected = [
+      '<span class="',
+      'blue',
+      '">Hello',
+      'Wilbur',
+      '</span>'
+    ];
+
+    let values = await readAll(tmpl({
       myClass: 'blue',
       name: 'Wilbur'
-    })
+    }));
+
+    assert.deepEqual(values, expected);
   });
 });
