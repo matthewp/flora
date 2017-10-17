@@ -1,14 +1,8 @@
 const assert = require('assert');
-//const flora = require('../flora.node.js').fromString;
-const {html} = require('../lib/index');
+const {html, map} = require('../lib/index');
 const fs = require('fs');
+const Readable = require('stream').Readable;
 const through = require('through2');
-
-let compares = function(tmpl, expected, data){
-  let res = tmpl(data);
-
-  assert.equal(res.trim(), expected.trim());
-};
 
 async function readAll(stream) {
   let values = [];
@@ -32,7 +26,10 @@ describe('TextNodes', function(){
 
     let expected = ['<span class="msg">Hello <strong>', 'World', '</strong>!</span>'];
 
-    let values = await readAll(tmpl({name: 'World'}));
+    let values = await readAll(tmpl({
+      name: Promise.resolve('World')
+    }));
+
     assert.deepEqual(values, expected);
   });
 });
@@ -54,10 +51,44 @@ describe('Attributes', function(){
     ];
 
     let values = await readAll(tmpl({
-      myClass: 'blue',
+      myClass: Promise.resolve().then(_ => 'blue'),
       name: 'Wilbur'
     }));
 
     assert.deepEqual(values, expected);
+  });
+});
+
+describe('Lists', function(){
+  it.only('basics works', async function() {
+    function tmpl({items}) {
+      return html`
+        <ul>
+          ${map(items, item => {
+            return html`<li>Item ${item}</li>`
+          })}
+        </ul>
+      `;
+    }
+
+    function arrStream(arr) {
+      return Readable({
+        objectMode: true,
+
+        read(){
+          if(arr.length) {
+            this.push(arr.shift());
+          } else {
+            this.push(null);
+          }
+        }
+      })
+    }
+
+    let values = await readAll(tmpl({
+      items: arrStream([1, 2, 3])
+    }));
+
+    console.log(values);
   });
 });
