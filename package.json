@@ -1,5 +1,5 @@
 {
-  "name": "@ps/flora",
+  "name": "flora-tmpl",
   "version": "0.1.0",
   "description": "Streaming templates for node",
   "main": "lib/index.js",
