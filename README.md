@@ -4,7 +4,12 @@
 
 Streaming templates.
 
-![flora_finch](https://user-images.githubusercontent.com/361671/31863166-b36389fc-b717-11e7-8b79-e8585faf8034.jpg)
+<a href="https://en.wikipedia.org/wiki/Flora_Finch">
+  <img alt="Flora Finch, silent film actress"
+   style="height:200px;" src="https://user-images.githubusercontent.com/361671/31863166-b36389fc-b717-11e7-8b79-e8585faf8034.jpg"/>
+</a>
+
+![flora_finch]()
 
 WIP, not ready for use.
 
