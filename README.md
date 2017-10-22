@@ -2,11 +2,14 @@
 
 > __flora-tmpl__ on npm.
 
-Streaming templates.
+
 
 [![Flora Finch, silent film actress](https://user-images.githubusercontent.com/361671/31864759-7ce1b858-b731-11e7-9984-0b60ba9ff9bd.jpg)](https://en.wikipedia.org/wiki/Flora_Finch)
 
-WIP, not ready for use.
+Streaming templates.
+
+[![Streaming HTML](https://asciinema.org/a/GD3kGM9Pqb4y3UcraKAiRnk2o.png)](https://asciinema.org/a/GD3kGM9Pqb4y3UcraKAiRnk2o)
+
 
 ## Install
 
