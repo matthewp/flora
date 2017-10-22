@@ -1,6 +1,6 @@
 # flora
 
-Simple templates.
+Streaming templates.
 
 WIP, not ready for use.
 
