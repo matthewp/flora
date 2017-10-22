@@ -6,7 +6,8 @@ const through = require('through2');
 
 async function readAll(stream) {
   let values = [];
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    stream.on('error', err => reject(err));
     stream.pipe(through(function(val, enc, next){
       values.push(val.toString().trim());
       next();
@@ -60,7 +61,7 @@ describe('Attributes', function(){
 });
 
 describe('Lists', function(){
-  it.only('basics works', async function() {
+  it('basics works', async function() {
     function tmpl({items}) {
       return html`
         <ul>
@@ -82,13 +83,27 @@ describe('Lists', function(){
             this.push(null);
           }
         }
-      })
+      });
     }
 
     let values = await readAll(tmpl({
       items: arrStream([1, 2, 3])
     }));
 
-    console.log(values);
+    let expected = [
+      '<ul>',
+      '<li>Item',
+      '1',
+      '</li>',
+      '<li>Item',
+      '2',
+      '</li>',
+      '<li>Item',
+      '3',
+      '</li>',
+      '</ul>'
+    ];
+
+    assert.deepEqual(values, expected);
   });
 });
