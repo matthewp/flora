@@ -8,8 +8,7 @@
 
 Streaming templates.
 
-[![Streaming HTML](https://asciinema.org/a/GD3kGM9Pqb4y3UcraKAiRnk2o.png)](https://asciinema.org/a/GD3kGM9Pqb4y3UcraKAiRnk2o)
-
+![Streaming HTML](https://user-images.githubusercontent.com/361671/32578154-2abd05a6-c4aa-11e7-95bd-1dc39729c8fc.gif)
 
 ## Install
 
