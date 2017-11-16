@@ -19,6 +19,23 @@ describe('TextNodes', function(){
     assert.deepEqual(values, expected);
   });
 
+  it('Null/undefined values are blanks', async function(){
+    function tmpl(data) {
+      return html`
+        <span>${data.one}</span><span>${data.two}</span>
+      `;
+    }
+
+    let expected = ['<span>','</span><span>','</span>'];
+
+    let values = await readAll(tmpl({
+      one: void 0,
+      two: null
+    }));
+
+    assert.deepEqual(values, expected);
+  });
+
   it('A promise can resolve to a stream', async function(){
     function tmpl({name}) {
       async function strongName() {
