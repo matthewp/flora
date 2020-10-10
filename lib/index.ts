@@ -4,6 +4,8 @@ import isStream from "is-stream";
 import pipeInto from "./util/pipe-into";
 import toString from "./util/to-string";
 
+export { map } from "./map";
+
 async function readAll(
 	stream: Readable,
 	strings: TemplateStringsArray,
@@ -33,7 +35,7 @@ async function readAll(
 	stream.push(null);
 }
 
-exports.html = function (strings: TemplateStringsArray, ...values: any[]) {
+export function html(strings: TemplateStringsArray, ...values: any[]) {
 	let reading = false;
 
 	let readable = new Readable({
@@ -48,6 +50,4 @@ exports.html = function (strings: TemplateStringsArray, ...values: any[]) {
 	});
 
 	return readable;
-};
-
-exports.map = require("./map").map;
+}
