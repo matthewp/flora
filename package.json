@@ -9,7 +9,7 @@
 		"debug": "node --inspect-brk node_modules/.bin/_mocha test/test.js",
 		"build": "tsc",
 		"watch": "tsc --watch",
-		"prepublish": "npm run build"
+		"install": "npm run build"
 	},
 	"keywords": ["templates"],
 	"author": "Matthew Phillips",
