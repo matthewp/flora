@@ -1,6 +1,6 @@
 {
 	"name": "flora-tmpl-ts",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Streaming templates for node",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -10,7 +10,9 @@
 		"build": "tsc",
 		"watch": "tsc --watch"
 	},
-	"keywords": ["templates"],
+	"keywords": [
+		"templates"
+	],
 	"author": "Matthew Phillips",
 	"license": "BSD-2-Clause",
 	"dependencies": {
