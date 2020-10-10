@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"strictNullChecks": true,
+		"target": "es6",
+		"declaration": true,
+		"esModuleInterop": true,
+		"jsx": "react",
+		"lib": ["es2017", "dom"]
+	},
+	"exclude": ["node_modules", "dist"]
+}
