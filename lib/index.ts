@@ -3,6 +3,7 @@ import isStream from "is-stream";
 
 import pipeInto from "./util/pipe-into";
 import toString from "./util/to-string";
+import ExtendedReadable from "./extended-readable";
 
 export { map } from "./map";
 
@@ -38,7 +39,7 @@ async function readAll(
 export function html(strings: TemplateStringsArray, ...values: any[]) {
 	let reading = false;
 
-	let readable = new Readable({
+	let readable = new ExtendedReadable({
 		read() {
 			if (reading) return;
 			reading = true;
