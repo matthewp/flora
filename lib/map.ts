@@ -1,8 +1,12 @@
 import arrayToStream from "stream-array";
 import isStream from "is-stream";
 import { Transform, Writable, Readable } from "stream";
+import ExtendedReadable from "./extended-readable";
 
-export function mapStream(stream: Readable, cb: (data: any) => any) {
+export function mapStream(
+	stream: Readable,
+	cb: (data: any) => Renderable | Promise<Renderable>
+) {
 	let outStream = new Transform();
 	outStream._transform = function (val, enc, next) {
 		next(null, val);
@@ -10,17 +14,19 @@ export function mapStream(stream: Readable, cb: (data: any) => any) {
 
 	let writable = new Writable({
 		objectMode: true,
-		write(data, enc, next) {
+		async write(data, enc, next) {
 			let val = cb(data);
+			if ((val as { then?: Function }).then) {
+				val = await val;
+			}
 			if (isStream(val)) {
 				val.pipe(outStream, { end: false });
 				val.on("error", next);
 				val.on("end", () => next(null));
 			} else {
-				// TODO
-				throw new Error(
-					"Using map with non-stream entries is not currently supported."
-				);
+				outStream.write((await val).toString(), "utf-8", () => {
+					next(null);
+				});
 			}
 		},
 	});
@@ -34,10 +40,12 @@ export function mapStream(stream: Readable, cb: (data: any) => any) {
 	return outStream;
 }
 
-export function map(listLike: any, cb: (data: any) => any) {
-	var list = listLike;
-	if (Array.isArray(listLike)) {
-		list = arrayToStream(listLike);
-	}
+type Renderable = string | number | ExtendedReadable;
+
+export function map<T>(
+	listLike: T[],
+	cb: (data: T) => Renderable | Promise<Renderable>
+) {
+	var list = arrayToStream(listLike);
 	return mapStream(list, cb);
 }
