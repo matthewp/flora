@@ -1,7 +1,8 @@
 import { Response } from "express";
+import { Readable } from "stream";
 
 export function streamResponse(
-	stream: ExtendedReadable,
+	stream: Readable,
 	res: Response,
 	type = "text/html; charset=utf-8"
 ) {
