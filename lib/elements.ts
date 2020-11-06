@@ -14,11 +14,8 @@ export function refresh(timeout: number = 0) {
 	return html/* HTML */ ` <meta http-equiv="refresh" content="${timeout}" />`;
 }
 
-export function redirect(url: string) {
-	return html/* HTML */ `<meta
-		http-equiv="Refresh"
-		content="0; url='${url}'"
-	/>`;
+export function redirect(url: string): string {
+	return /* HTML */ `<meta http-equiv="Refresh" content="0; url='${url}'" />`;
 }
 
 export function document(content: ExtendedReadable): ExtendedReadable {
