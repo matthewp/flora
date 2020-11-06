@@ -8,12 +8,9 @@
 		"test": "mocha test/test.js",
 		"debug": "node --inspect-brk node_modules/.bin/_mocha test/test.js",
 		"build": "tsc",
-		"watch": "tsc --watch",
-		"install": "npm run build"
+		"watch": "tsc --watch"
 	},
-	"keywords": [
-		"templates"
-	],
+	"keywords": ["templates"],
 	"author": "Matthew Phillips",
 	"license": "BSD-2-Clause",
 	"dependencies": {
