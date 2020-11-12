@@ -361,3 +361,55 @@ export class Loader {
 		</style>`;
 	}
 }
+
+export function fileDrop(name: string) {
+	return /* HTML */ ` <style>
+			.file-drop {
+				border: 2px dashed #aeacac;
+				margin-top: 18px;
+				position: relative;
+				height: 90px;
+				transition: border-color 200ms;
+			}
+
+			.file-drop:hover {
+				border-color: #777;
+			}
+
+			.file-drop input,
+			.file-drop label {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				top: 0;
+			}
+
+			.file-drop input {
+				opacity: 0;
+				cursor: pointer;
+			}
+
+			.file-drop--label::after {
+				content: var(
+					--filename,
+					"Przeciągnij i upuść pliki tutaj lub, kliknij aby wybrać plik z dysku"
+				);
+				display: block;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
+		<div class="file-drop form-element">
+			<label class="file-drop--label"> </label>
+			<input
+				type="${name}"
+				name="${name}"
+				required
+				onchange="filename = this.value.split('\\\\').slice(-1)[0]; this.parentElement.style.setProperty('--filename', '\\'' + filename + '\\'')"
+			/>
+		</div>`;
+}
