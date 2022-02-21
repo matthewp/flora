@@ -364,7 +364,7 @@ export class Loader {
 	}
 }
 
-export function fileDrop(name: string, accept: string[]) {
+export function fileDrop(name: string, accept?: string[]) {
 	return /* HTML */ ` <style>
 			.file-drop {
 				border: 2px dashed #aeacac;
@@ -410,7 +410,7 @@ export function fileDrop(name: string, accept: string[]) {
 			<input
 				type="${name}"
 				name="${name}"
-				accept="${accept.join(",")}"
+				${accept ? `accept="${accept.join(",")}"` : ""}
 				required
 				onchange="filename = this.value.split('\\\\').slice(-1)[0]; this.parentElement.style.setProperty('--filename', '\\'' + filename + '\\'')"
 			/>
