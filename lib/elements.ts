@@ -207,7 +207,9 @@ export function checkForMore(
 				onChange,
 			})}
 			<script>
-				${/*to run the handler in the case the browser pre-fills the checkbox on load*/ ""};
+				${
+					/*to run the handler in the case the browser pre-fills the checkbox on load*/ ""
+				};
 				window.addEventListener("load", function () {
 					(function () {
 						${onChange};
@@ -362,7 +364,7 @@ export class Loader {
 	}
 }
 
-export function fileDrop(name: string) {
+export function fileDrop(name: string, accept: string[]) {
 	return /* HTML */ ` <style>
 			.file-drop {
 				border: 2px dashed #aeacac;
@@ -408,6 +410,7 @@ export function fileDrop(name: string) {
 			<input
 				type="${name}"
 				name="${name}"
+				accept="${accept.join(",")}"
 				required
 				onchange="filename = this.value.split('\\\\').slice(-1)[0]; this.parentElement.style.setProperty('--filename', '\\'' + filename + '\\'')"
 			/>
